@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 420px;">
+
+        <h2 class="mb-4 text-center">Se connecter</h2>
+
+        <form method="post" class="card shadow-sm border-0 p-4">
+
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="alert alert-info">
+                    Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}.
+                    <a href="{{ logout_path() }}">Se déconnecter</a>
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Email</label>
+                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+            </div>
+
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+            <button class="btn btn-primary w-100" type="submit">
+                Se connecter
+            </button>
+
+        </form>
+
+        <p class="text-center mt-3">
+            Pas encore de compte ? <a href="{{ path('app_register') }}">S'inscrire</a>
+        </p>
+
+    </div>
+{% endblock %}
