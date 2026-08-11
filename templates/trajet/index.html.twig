@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Publier un trajet — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 480px;">
+
+        <h2 class="mb-4 text-center">Publier un trajet</h2>
+
+        {{ form_start(trajetForm, {'attr': {'class': 'card shadow-sm border-0 p-4'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(trajetForm.depart, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(trajetForm.depart, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(trajetForm.depart) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(trajetForm.arrivee, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(trajetForm.arrivee, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(trajetForm.arrivee) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(trajetForm.dateDepart, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(trajetForm.dateDepart, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(trajetForm.dateDepart) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(trajetForm.heureDepart, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(trajetForm.heureDepart, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(trajetForm.heureDepart) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(trajetForm.placesDisponibles, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(trajetForm.placesDisponibles, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(trajetForm.placesDisponibles) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(trajetForm.prix, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(trajetForm.prix, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(trajetForm.prix) }}
+        </div>
+
+        <div class="mb-4">
+            {{ form_label(trajetForm.vehicule, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(trajetForm.vehicule, {'attr': {'class': 'form-select'}}) }}
+            {{ form_errors(trajetForm.vehicule) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Publier le trajet</button>
+
+        {{ form_end(trajetForm) }}
+
+    </div>
+{% endblock %}

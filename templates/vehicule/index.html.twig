@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un véhicule — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 480px;">
+
+        <h2 class="mb-4 text-center">Ajouter un véhicule</h2>
+
+        {{ form_start(vehiculeForm, {'attr': {'class': 'card shadow-sm border-0 p-4'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(vehiculeForm.marque, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(vehiculeForm.marque, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(vehiculeForm.marque) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(vehiculeForm.modele, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(vehiculeForm.modele, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(vehiculeForm.modele) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(vehiculeForm.immatriculation, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(vehiculeForm.immatriculation, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(vehiculeForm.immatriculation) }}
+        </div>
+
+        <div class="mb-4">
+            {{ form_label(vehiculeForm.nombreDePlaces, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(vehiculeForm.nombreDePlaces, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(vehiculeForm.nombreDePlaces) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Enregistrer le véhicule</button>
+
+        {{ form_end(vehiculeForm) }}
+
+    </div>
+{% endblock %}

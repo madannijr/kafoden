@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Utilisateur;
 use App\Entity\Vehicule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,28 +18,15 @@ class VehiculeRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicule::class);
     }
 
-    //    /**
-    //     * @return Vehicule[] Returns an array of Vehicule objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('v.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Vehicule
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Retourne une requête (non exécutée) pour récupérer
+     * uniquement les véhicules appartenant à un utilisateur donné.
+     * Utilisée notamment dans TrajetType pour filtrer le menu déroulant.
+     */
+    public function findByProprietaire(Utilisateur $utilisateur): QueryBuilder
+    {
+        return $this->createQueryBuilder('v')
+            ->where('v.proprietaire = :utilisateur')
+            ->setParameter('utilisateur', $utilisateur);
+    }
 }
