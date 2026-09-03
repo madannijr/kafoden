@@ -75,6 +75,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'auteur')]
     private Collection $avisRediges;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $photo = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $adresse = null;
+
     public function __construct()
     {
         $this->vehicules = new ArrayCollection();
@@ -348,6 +354,30 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
                 $avisRedige->setAuteur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): static
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes réservations — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+
+        <h2 class="mb-4">Mes réservations</h2>
+
+        {% if reservations|length == 0 %}
+            <p class="text-muted">Vous n'avez pas encore de réservation.</p>
+        {% else %}
+            <div class="row g-3">
+                {% for reservation in reservations %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <div class="fw-semibold">
+                                            {{ reservation.trajet.depart }} <i class="bi bi-arrow-right"></i> {{ reservation.trajet.arrivee }}
+                                        </div>
+                                        <small class="text-muted">
+                                            Conducteur : {{ reservation.trajet.conducteur.prenom }} {{ reservation.trajet.conducteur.nom }}
+                                        </small>
+                                    </div>
+                                    {% if reservation.statut == 'annulee' %}
+                                        <span class="badge bg-secondary">Annulée</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Confirmée</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="text-muted small">
+                                    <i class="bi bi-clock"></i> {{ reservation.trajet.dateDepart|date('d/m/Y') }} à {{ reservation.trajet.heureDepart|date('H:i') }}
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="bi bi-people"></i> {{ reservation.placesReservees }} place{{ reservation.placesReservees > 1 ? 's' : '' }} réservée{{ reservation.placesReservees > 1 ? 's' : '' }}
+                                </div>
+
+                                {% if reservation.statut != 'annulee' %}
+                                    <a href="{{ path('app_reservation_annuler', {id: reservation.id}) }}"
+                                       class="btn btn-outline-danger btn-sm mt-2"
+                                       onclick="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+                                        <i class="bi bi-x-circle"></i> Annuler
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

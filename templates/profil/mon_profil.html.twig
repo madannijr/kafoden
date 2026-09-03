@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 600px;">
+
+        <a href="{{ path('app_home') }}" class="text-decoration-none text-muted small d-inline-block mb-3">
+            <i class="bi bi-arrow-left"></i> Retour à l'accueil
+        </a>
+
+        <div class="card shadow-sm border-0 p-4">
+
+            <div class="d-flex align-items-center gap-3 mb-4">
+                {% if app.user.photo %}
+                    <img src="{{ asset('uploads/photos/' ~ app.user.photo) }}" alt="Photo de profil" class="rounded-circle" style="width:64px;height:64px;object-fit:cover;">
+                {% else %}
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-semibold" style="width:64px;height:64px;font-size:22px;">
+                        {{ app.user.prenom|slice(0,1) }}{{ app.user.nom|slice(0,1) }}
+                    </div>
+                {% endif %}
+                <div>
+                    <h3 class="mb-0">{{ app.user.prenom }} {{ app.user.nom }}</h3>
+                    {% if app.user.estVerifie %}
+                        <small class="text-success"><i class="bi bi-patch-check-fill"></i> Identité vérifiée</small>
+                    {% else %}
+                        <small class="text-muted">Identité non vérifiée</small>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if not app.user.estVerifie %}
+                <div class="alert alert-warning d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Votre identité n'est pas encore vérifiée. Vous devez la vérifier pour pouvoir publier un trajet.
+                    </div>
+                    <a href="{{ path('app_document_nouveau') }}" class="btn btn-warning btn-sm text-nowrap ms-3">
+                        Vérifier maintenant
+                    </a>
+                </div>
+            {% endif %}
+
+            <hr>
+
+            <h5 class="mb-2">Mes informations</h5>
+            <p class="mb-1"><i class="bi bi-envelope"></i> {{ app.user.email }}</p>
+            <p class="mb-0"><i class="bi bi-telephone"></i> {{ app.user.telephone }}</p>
+
+            {% if app.user.documentsIdentite|length > 0 %}
+                <hr>
+                <h5 class="mb-2">Mes documents</h5>
+                <div class="d-flex flex-column gap-2 mb-3">
+                    {% for document in app.user.documentsIdentite %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ path('app_document_voir', {id: document.id}) }}" target="_blank">
+                                <i class="bi bi-file-earmark-text"></i> {{ document.type }}
+                            </a>
+                            <span class="badge bg-{{ document.statut == 'valide' ? 'success' : (document.statut == 'refuse' ? 'danger' : 'warning') }}">
+                                {{ document.statut }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <a href="{{ path('app_profil_photo') }}" class="btn btn-outline-primary btn-sm mt-3">
+                <i class="bi bi-camera"></i> Changer ma photo
+            </a>
+
+            <a href="{{ path('app_profil_modifier') }}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-pencil"></i> Modifier mes informations
+            </a>
+
+        </div>
+
+    </div>
+{% endblock %}

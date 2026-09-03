@@ -30,16 +30,40 @@
         </div>
 
         <div class="mb-3">
+            {{ form_label(registrationForm.adresse, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(registrationForm.adresse, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(registrationForm.adresse) }}
+        </div>
+
+        <div class="mb-3">
             {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
             {{ form_errors(registrationForm.email) }}
         </div>
 
         <div class="mb-3">
-            {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(registrationForm.plainPassword) }}
+            {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'form-label'}}) }}
+            <div class="input-group">
+                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'id': 'password1'}}) }}
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('password1', this)">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </div>
+            {{ form_errors(registrationForm.plainPassword.first) }}
         </div>
+
+        <div class="mb-4">
+            {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'form-label'}}) }}
+            <div class="input-group">
+                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'id': 'password2'}}) }}
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('password2', this)">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </div>
+            {{ form_errors(registrationForm.plainPassword.second) }}
+        </div>
+
+        {{ form_errors(registrationForm.plainPassword) }}
 
         <div class="form-check mb-4">
             {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
@@ -52,7 +76,7 @@
         {{ form_end(registrationForm) }}
 
         <p class="text-center mt-3">
-            Déjà un compte ? <a href="#">Se connecter</a>
+            Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
         </p>
 
     </div>

@@ -1,0 +1,22 @@
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_admin' ? 'active' : '' }}" href="{{ path('app_admin') }}">
+            <i class="bi bi-file-earmark-text"></i> Documents
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_admin_trajets' ? 'active' : '' }}" href="{{ path('app_admin_trajets') }}">
+            <i class="bi bi-signpost"></i> Trajets
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_admin_reservations' ? 'active' : '' }}" href="{{ path('app_admin_reservations') }}">
+            <i class="bi bi-calendar-check"></i> Réservations
+        </a>
+    </li>
+    
+    <li class="nav-item">
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_admin_utilisateurs' ? 'active' : '' }}" href="{{ path('app_admin_utilisateurs') }}">
+            <i class="bi bi-people"></i> Utilisateurs
+    </li>
+</ul>

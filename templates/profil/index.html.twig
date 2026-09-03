@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ utilisateur.prenom }} {{ utilisateur.nom }} — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 600px;">
+
+        <a href="{{ path('app_home') }}" class="text-decoration-none text-muted small d-inline-block mb-3">
+            <i class="bi bi-arrow-left"></i> Retour à l'accueil
+        </a>
+
+        <div class="card shadow-sm border-0 p-4">
+
+            <div class="d-flex align-items-center gap-3 mb-4">
+                {% if utilisateur.photo %}
+                    <img src="{{ asset('uploads/photos/' ~ utilisateur.photo) }}" alt="Photo de profil" class="rounded-circle" style="width:64px;height:64px;object-fit:cover;">
+                {% else %}
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-semibold" style="width:64px;height:64px;font-size:22px;">
+                        {{ utilisateur.prenom|slice(0,1) }}{{ utilisateur.nom|slice(0,1) }}
+                    </div>
+                {% endif %}
+                <div>
+                    <h3 class="mb-0">
+                        {{ utilisateur.prenom }} {{ utilisateur.nom }}
+                        {% if utilisateur.estVerifie %}
+                            <i class="bi bi-patch-check-fill text-primary"></i>
+                        {% endif %}
+                    </h3>
+                    {% if utilisateur.estVerifie %}
+                        <small class="text-success">Identité vérifiée</small>
+                    {% else %}
+                        <small class="text-muted">Identité non vérifiée</small>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if utilisateur.vehicules|length > 0 %}
+                <h5 class="mb-2">Véhicules</h5>
+                <ul class="list-unstyled">
+                    {% for vehicule in utilisateur.vehicules %}
+                        <li class="mb-1">
+                            <i class="bi bi-car-front"></i> {{ vehicule.marque }} {{ vehicule.modele }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if peutVoirTelephone %}
+                <hr>
+                <h5 class="mb-2">Contact</h5>
+                <p class="mb-0"><i class="bi bi-telephone"></i> {{ utilisateur.telephone }}</p>
+            {% elseif app.user %}
+                <hr>
+                <p class="text-muted small mb-0">
+                    <i class="bi bi-lock"></i> Le numéro de téléphone sera visible après une réservation confirmée.
+                </p>
+            {% endif %}
+
+        </div>
+
+    </div>
+{% endblock %}

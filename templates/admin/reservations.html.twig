@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les réservations — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+
+        <h2 class="mb-4">Toutes les réservations</h2>
+        {% include 'admin/_navigation.html.twig' %}
+
+        {% if reservations|length == 0 %}
+            <p class="text-muted">Aucune réservation enregistrée pour le moment.</p>
+        {% else %}
+            <div class="row g-3">
+                {% for reservation in reservations %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <div class="fw-semibold">
+                                            {{ reservation.trajet.depart }} <i class="bi bi-arrow-right"></i> {{ reservation.trajet.arrivee }}
+                                        </div>
+                                        <small class="text-muted">
+                                            Passager : {{ reservation.passager.prenom }} {{ reservation.passager.nom }}
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-{{ reservation.statut == 'confirmee' ? 'success' : 'secondary' }}">
+                                    {{ reservation.statut }}
+                                </span>
+                                </div>
+
+                                <div class="text-muted small">
+                                    <i class="bi bi-people"></i> {{ reservation.placesReservees }} place{{ reservation.placesReservees > 1 ? 's' : '' }} réservée{{ reservation.placesReservees > 1 ? 's' : '' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

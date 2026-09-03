@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les utilisateurs — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+
+        <h2 class="mb-4">Tous les utilisateurs</h2>
+
+        {% include 'admin/_navigation.html.twig' %}
+
+        <div class="row g-3">
+            {% for utilisateur in utilisateurs %}
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                {% if utilisateur.photo %}
+                                    <img src="{{ asset('uploads/photos/' ~ utilisateur.photo) }}" alt="" class="rounded-circle" style="width:48px;height:48px;object-fit:cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-semibold" style="width:48px;height:48px;">
+                                        {{ utilisateur.prenom|slice(0,1) }}{{ utilisateur.nom|slice(0,1) }}
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <div class="fw-semibold">
+                                        {{ utilisateur.prenom }} {{ utilisateur.nom }}
+                                        {% if utilisateur.estVerifie %}
+                                            <i class="bi bi-patch-check-fill text-primary"></i>
+                                        {% endif %}
+                                    </div>
+                                    <small class="text-muted">{{ utilisateur.email }}</small>
+                                </div>
+                            </div>
+
+                            <p class="small mb-1"><i class="bi bi-telephone"></i> {{ utilisateur.telephone }}</p>
+                            <p class="small mb-1"><i class="bi bi-geo-alt"></i> {{ utilisateur.adresse }}</p>
+                            <p class="small mb-3">
+                            <span class="badge bg-{{ utilisateur.estVerifie ? 'success' : 'secondary' }}">
+                                {{ utilisateur.estVerifie ? 'Identité vérifiée' : 'Non vérifié' }}
+                            </span>
+                            </p>
+
+                            {% if utilisateur.documentsIdentite|length > 0 %}
+                                <hr>
+                                <h6 class="small fw-semibold mb-2">Documents fournis</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for document in utilisateur.documentsIdentite %}
+                                        <a href="{{ path('app_admin_document_voir', {id: document.id}) }}" target="_blank" class="text-center">
+                                            {% if document.cheminFichier|slice(-4) == '.pdf' %}
+                                                <div class="rounded border d-flex align-items-center justify-content-center bg-light" style="width:70px;height:70px;">
+                                                    <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size:28px;"></i>
+                                                </div>
+                                            {% else %}
+                                                <img src="{{ path('app_admin_document_voir', {id: document.id}) }}" alt="{{ document.type }}" class="rounded border" style="width:70px;height:70px;object-fit:cover;">
+                                            {% endif %}
+                                            <div class="small text-muted">{{ document.type }}</div>
+                                            <span class="badge bg-{{ document.statut == 'valide' ? 'success' : (document.statut == 'refuse' ? 'danger' : 'warning') }}">
+                                                    {{ document.statut }}
+                                                </span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted small mb-0">Aucun document fourni.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

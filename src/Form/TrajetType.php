@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Repository\VehiculeRepository;
+use Symfony\Component\Validator\Constraints\PositiveOrZero;
 
 class TrajetType extends AbstractType
 {
@@ -40,6 +41,11 @@ class TrajetType extends AbstractType
             ])
             ->add('placesDisponibles', NumberType::class, [
                 'label' => 'Places disponibles',
+                'constraints'=> [
+                    new PositiveOrZero(
+                        message: "Le nombre de places doit être positif"
+                    )
+                ]
             ])
             ->add('prix', NumberType::class, [
                 'label' => 'Prix (GNF)',

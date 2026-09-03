@@ -48,6 +48,9 @@ class Trajet
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'trajet')]
     private Collection $reservations;
 
+    #[ORM\Column(length: 20)]
+    private ?string $statut = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -180,6 +183,18 @@ class Trajet
                 $reservation->setTrajet(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }

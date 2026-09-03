@@ -20,7 +20,7 @@ class DocumentIdentite
     #[ORM\Column(length: 100)]
     private ?string $cheminFichier = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $dateExpiration = null;
 
     #[ORM\Column(length: 20)]
@@ -64,7 +64,7 @@ class DocumentIdentite
         return $this->dateExpiration;
     }
 
-    public function setDateExpiration(\DateTime $dateExpiration): static
+    public function setDateExpiration(?\DateTime $dateExpiration): static
     {
         $this->dateExpiration = $dateExpiration;
 

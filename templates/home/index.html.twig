@@ -7,21 +7,21 @@
 
         <div class="card shadow-sm border-0 mb-4" style="background-color:#f8f9fa;">
             <div class="card-body">
-                <form class="row g-3 align-items-end">
+                <form class="row g-3 align-items-end" method="get" action="{{ path('app_home') }}">
                     <div class="col-md-4">
                         <label class="form-label"><i class="bi bi-circle-fill text-primary small"></i> Départ</label>
-                        <input type="text" class="form-control" placeholder="Ville de départ">
+                        <input type="text" class="form-control" name="depart" placeholder="Ville de départ" value="{{ app.request.query.get('depart') }}">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label"><i class="bi bi-geo-alt-fill text-danger"></i> Arrivée</label>
-                        <input type="text" class="form-control" placeholder="Ville d'arrivée">
+                        <input type="text" class="form-control" name="arrivee" placeholder="Ville d'arrivée" value="{{ app.request.query.get('arrivee') }}">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label"><i class="bi bi-calendar3"></i> Date</label>
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" name="date" value="{{ app.request.query.get('date') }}">
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">
+                        <button type="submit" class="btn btn-primary w-100 text-nowrap">
                             <i class="bi bi-search"></i> Rechercher
                         </button>
                     </div>
@@ -39,11 +39,19 @@
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
-                                        {{ trajet.conducteur.prenom|slice(0,1) }}{{ trajet.conducteur.nom|slice(0,1) }}
+                                        {% if trajet.conducteur.photo %}
+                                            <img src="{{ asset('uploads/photos/' ~ trajet.conducteur.photo) }}" alt="" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+                                        {% else %}
+                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                                                {{ trajet.conducteur.prenom|slice(0,1) }}{{ trajet.conducteur.nom|slice(0,1) }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div>
                                         <div class="fw-semibold">
-                                            {{ trajet.conducteur.prenom }} {{ trajet.conducteur.nom }}
+                                            <a href="{{ path('app_profil', {id: trajet.conducteur.id}) }}" class="text-decoration-none text-dark">
+                                                {{ trajet.conducteur.prenom }} {{ trajet.conducteur.nom }}
+                                            </a>
                                             {% if trajet.conducteur.estVerifie %}
                                                 <i class="bi bi-patch-check-fill text-primary"></i>
                                             {% endif %}
@@ -55,13 +63,18 @@
                             </div>
 
                             <div class="text-muted small my-2">
+                                <i class="bi bi-calendar-event"></i> {{ trajet.dateDepart|date('d/m/Y') }}
                                 <i class="bi bi-clock"></i> {{ trajet.heureDepart|date('H:i') }}
                                 — {{ trajet.depart }} <i class="bi bi-arrow-right"></i> {{ trajet.arrivee }}
                             </div>
 
+
                             <span class="badge bg-success-subtle text-success-emphasis">
                             {{ trajet.placesDisponibles }} place{{ trajet.placesDisponibles > 1 ? 's' : '' }} restante{{ trajet.placesDisponibles > 1 ? 's' : '' }}
                         </span>
+                            <a href="{{ path('app_reservation_nouvelle', {id: trajet.id}) }}" class="btn btn-primary btn-sm float-end">
+                                Réserver
+                            </a>
                         </div>
                     </div>
                 </div>

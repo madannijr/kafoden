@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un document — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 480px;">
+
+        <a href="{{ path('app_home') }}" class="text-decoration-none text-muted small d-inline-block mb-3">
+            <i class="bi bi-arrow-left"></i> Retour à l'accueil
+        </a>
+
+        <h2 class="mb-4 text-center">Ajouter un document d'identité</h2>
+
+        {{ form_start(documentForm, {'attr': {'class': 'card shadow-sm border-0 p-4', 'enctype': 'multipart/form-data'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(documentForm.type, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(documentForm.type, {'attr': {'class': 'form-select'}}) }}
+            {{ form_errors(documentForm.type) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(documentForm.dateExpiration, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(documentForm.dateExpiration, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(documentForm.dateExpiration) }}
+        </div>
+
+        <div class="mb-4">
+            {{ form_label(documentForm.fichier, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(documentForm.fichier, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(documentForm.fichier) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Envoyer le document</button>
+
+        {{ form_end(documentForm) }}
+
+    </div>
+{% endblock %}

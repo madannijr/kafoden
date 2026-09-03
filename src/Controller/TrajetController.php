@@ -27,7 +27,6 @@ class TrajetController extends AbstractController
 
             return $this->redirectToRoute('app_vehicule');
         }
-
         $trajet = new Trajet();
 
         // On passe l'utilisateur connecté au formulaire, pour qu'il puisse
@@ -41,6 +40,8 @@ class TrajetController extends AbstractController
             // Le conducteur est toujours l'utilisateur connecté,
             // jamais un champ rempli depuis le formulaire
             $trajet->setConducteur($utilisateur);
+            // Un nouveau trajet est toujours actif à sa création
+            $trajet->setStatut('active');
 
             $entityManager->persist($trajet);
             $entityManager->flush();
@@ -53,5 +54,67 @@ class TrajetController extends AbstractController
         return $this->render('trajet/index.html.twig', [
             'trajetForm' => $form,
         ]);
+    }
+
+    // Liste des trajets publiés par l'utilisateur connecté, avec leurs réservations
+    #[Route('/mes-trajets', name: 'app_mes_trajets')]
+    #[IsGranted('ROLE_USER')]
+    public function mesTrajets(): Response
+    {
+        return $this->render('trajet/mes_trajets.html.twig', [
+            'trajets' => $this->getUser()->getTrajetsPublies(),
+        ]);
+    }
+
+    // Modification d'un trajet
+    #[Route('/trajet/{id}/modifier', name: 'app_trajet_modifier')]
+    #[IsGranted('ROLE_USER')]
+public function modifierTrajet(Trajet $trajet, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Sécurité : seul le conducteur propriétaire peut modifier
+        if($trajet->getConducteur()->getId() !== $this->getUser()->getId()){
+            $this->addFlash('danger', 'Ce trajet n\'est pas le vôtre.');
+            return $this->redirectToRoute('app_mes_trajets');
+        }
+        $form = $this->createForm(TrajetType::class, $trajet, [
+            'utilisateur' => $this->getUser(),
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Le trajet a été modifié avec succès.');
+            return $this->redirectToRoute('app_mes_trajets');
+
+        }
+        return $this->render('trajet/index.html.twig', [
+            'trajetForm' => $form,
+        ]);
+    }
+
+    // Annulation d'un trajet par son conducteur
+    #[Route('/trajet/{id}/annuler', name: 'app_trajet_annuler')]
+    #[IsGranted('ROLE_USER')]
+    public function annulerTrajet(Trajet $trajet, EntityManagerInterface $entityManager): Response
+    {
+        // Sécurité : seul le conducteur propriétaire peut annuler
+        if ($trajet->getConducteur()->getId() !== $this->getUser()->getId()) {
+            $this->addFlash('danger', 'Ce trajet n\'est pas le vôtre.');
+            return $this->redirectToRoute('app_mes_trajets');
+        }
+
+        // On annule le trajet lui-même
+        $trajet->setStatut('annule');
+
+        // On annule en cascade toutes les réservations liées à ce trajet
+        foreach ($trajet->getReservations() as $reservation) {
+            $reservation->setStatut('annulee');
+        }
+
+        // Un seul flush() pour écrire tous les changements en une fois
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le trajet a été annulé. Les passagers concernés verront leur réservation annulée.');
+
+        return $this->redirectToRoute('app_mes_trajets');
     }
 }

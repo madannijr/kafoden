@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+
+        <h2 class="mb-4">Documents en attente de validation</h2>
+        {% include 'admin/_navigation.html.twig' %}
+
+        {% if documents|length == 0 %}
+            <p class="text-muted">Aucun document en attente pour le moment.</p>
+        {% else %}
+            <div class="row g-3">
+                {% for document in documents %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <div class="fw-semibold">{{ document.utilisateur.prenom }} {{ document.utilisateur.nom }}</div>
+                                        <small class="text-muted">{{ document.utilisateur.email }}</small>
+                                    </div>
+                                    <span class="badge bg-secondary">{{ document.type }}</span>
+                                </div>
+
+                                <a href="{{ asset('uploads/documents/' ~ document.cheminFichier) }}" target="_blank" class="d-block mb-3">
+                                    <i class="bi bi-file-earmark-text"></i> Voir le document
+                                </a>
+
+                                <div class="d-flex gap-2">
+                                    <a href="{{ path('app_admin_document_valider', {id: document.id}) }}" class="btn btn-success btn-sm">Valider</a>
+                                    <a href="{{ path('app_admin_document_refuser', {id: document.id}) }}" class="btn btn-danger btn-sm">Refuser</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

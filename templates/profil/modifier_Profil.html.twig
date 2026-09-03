@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="max-width: 480px;">
+
+        <a href="{{ path('app_mon_profil') }}" class="text-decoration-none text-muted small d-inline-block mb-3">
+            <i class="bi bi-arrow-left"></i> Retour à mon profil
+        </a>
+
+        <h2 class="mb-4 text-center">Modifier mon profil</h2>
+
+        {{ form_start(modifierForm, {'attr': {'class': 'card shadow-sm border-0 p-4'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(modifierForm.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(modifierForm.nom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(modifierForm.nom) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(modifierForm.prenom, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(modifierForm.prenom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(modifierForm.prenom) }}
+        </div>
+
+        <div class="mb-4">
+            {{ form_label(modifierForm.telephone, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(modifierForm.telephone, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(modifierForm.telephone) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(modifierForm.adresse, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(modifierForm.adresse, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(modifierForm.adresse) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Enregistrer les modifications</button>
+
+        {{ form_end(modifierForm) }}
+
+    </div>
+{% endblock %}

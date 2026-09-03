@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les trajets — Kafoden{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+
+        <h2 class="mb-4">Tous les trajets</h2>
+        {% include 'admin/_navigation.html.twig' %}
+
+        {% if trajets|length == 0 %}
+            <p class="text-muted">Aucun trajet enregistré pour le moment.</p>
+        {% else %}
+            <div class="row g-3">
+                {% for trajet in trajets %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <div class="fw-semibold">
+                                            {{ trajet.depart }} <i class="bi bi-arrow-right"></i> {{ trajet.arrivee }}
+                                        </div>
+                                        <small class="text-muted">
+                                            Conducteur : {{ trajet.conducteur.prenom }} {{ trajet.conducteur.nom }}
+                                        </small>
+                                    </div>
+                                    <span class="fw-bold">{{ trajet.prix|number_format(0, ',', ' ') }} GNF</span>
+                                </div>
+
+                                <div class="text-muted small mb-2">
+                                    <i class="bi bi-clock"></i> {{ trajet.dateDepart|date('d/m/Y') }} à {{ trajet.heureDepart|date('H:i') }}
+                                </div>
+
+                                <span class="badge bg-success-subtle text-success-emphasis mb-2">
+                                {{ trajet.placesDisponibles }} place{{ trajet.placesDisponibles > 1 ? 's' : '' }} restante{{ trajet.placesDisponibles > 1 ? 's' : '' }}
+                            </span>
+
+                                <div class="d-flex gap-2 mt-2">
+                                    <a href="{{ path('app_admin_trajet_supprimer', {id: trajet.id}) }}" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
