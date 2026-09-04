@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class ModifierProfilType extends AbstractType
 {
@@ -22,8 +23,13 @@ class ModifierProfilType extends AbstractType
             ])
             ->add('telephone', TelType::class, [
                 'label' => 'Telephone',
+                'constraints' => [
+                    new Regex(
+                        pattern: '/^(\+224)?6\d{8}$/',
+                        message: 'Veuillez saisir un numéro de téléphone guinéen valide (ex : 6XXXXXXXX ou +2246XXXXXXXX).',
+                    ),
+                ],
             ])
-
             ->add('adresse', TextType::class, [
                 'label' => 'Adresse',
             ])

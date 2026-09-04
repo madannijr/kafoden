@@ -11,6 +11,10 @@
 
         <h2 class="mb-4 text-center">Publier un trajet</h2>
 
+        {% if erreurPlaces is defined %}
+            <div class="alert alert-danger">{{ erreurPlaces }}</div>
+        {% endif %}
+
         {{ form_start(trajetForm, {'attr': {'class': 'card shadow-sm border-0 p-4'}}) }}
 
         <div class="mb-3">

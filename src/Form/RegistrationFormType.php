@@ -14,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
@@ -28,6 +29,12 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('telephone', TelType::class, [
                 'label' => 'Téléphone',
+                'constraints' => [
+                    new Regex(
+                        pattern: '/^(\+224)?6\d{8}$/',
+                        message: 'Veuillez saisir un numéro de téléphone guinéen valide (ex : 6XXXXXXXX ou +2246XXXXXXXX).',
+                    ),
+                ],
             ])
             ->add('adresse', TextType::class, [
                 'label' => 'Adresse',
@@ -42,7 +49,6 @@ class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
-            // Le mot de passe est demandé deux fois pour éviter les erreurs de frappe
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,

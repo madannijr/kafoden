@@ -37,6 +37,15 @@ class TrajetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // On vérifie que les places proposées ne dépassent pas la capacité du véhicule
+            if ($trajet->getPlacesDisponibles() > $trajet->getVehicule()->getNombreDePlaces()) {
+                return $this->render('trajet/index.html.twig', [
+                    'trajetForm' => $form,
+                    'erreurPlaces' => 'Le nombre de places proposées ne peut pas dépasser la capacité du véhicule.',
+                ]);
+            }
+
             // Le conducteur est toujours l'utilisateur connecté,
             // jamais un champ rempli depuis le formulaire
             $trajet->setConducteur($utilisateur);
@@ -74,10 +83,10 @@ class TrajetController extends AbstractController
     // Modification d'un trajet
     #[Route('/trajet/{id}/modifier', name: 'app_trajet_modifier')]
     #[IsGranted('ROLE_USER')]
-public function modifierTrajet(Trajet $trajet, Request $request, EntityManagerInterface $entityManager): Response
+    public function modifierTrajet(Trajet $trajet, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Sécurité : seul le conducteur propriétaire peut modifier
-        if($trajet->getConducteur()->getId() !== $this->getUser()->getId()){
+        if ($trajet->getConducteur()->getId() !== $this->getUser()->getId()) {
             $this->addFlash('danger', 'Ce trajet n\'est pas le vôtre.');
             return $this->redirectToRoute('app_mes_trajets');
         }
@@ -86,10 +95,18 @@ public function modifierTrajet(Trajet $trajet, Request $request, EntityManagerIn
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // On vérifie que les places proposées ne dépassent pas la capacité du véhicule
+            if ($trajet->getPlacesDisponibles() > $trajet->getVehicule()->getNombreDePlaces()) {
+                return $this->render('trajet/index.html.twig', [
+                    'trajetForm' => $form,
+                    'erreurPlaces' => 'Le nombre de places proposées ne peut pas dépasser la capacité du véhicule.',
+                ]);
+            }
+
             $entityManager->flush();
             $this->addFlash('success', 'Le trajet a été modifié avec succès.');
             return $this->redirectToRoute('app_mes_trajets');
-
         }
         return $this->render('trajet/index.html.twig', [
             'trajetForm' => $form,
@@ -115,7 +132,6 @@ public function modifierTrajet(Trajet $trajet, Request $request, EntityManagerIn
             $reservation->setStatut('annulee');
         }
 
-        // Un seul flush() pour écrire tous les changements en une fois
         $entityManager->flush();
 
         $this->addFlash('success', 'Le trajet a été annulé. Les passagers concernés verront leur réservation annulée.');

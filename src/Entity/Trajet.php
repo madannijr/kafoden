@@ -48,7 +48,7 @@ class Trajet
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'trajet')]
     private Collection $reservations;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 100)]
     private ?string $statut = null;
 
     public function __construct()
