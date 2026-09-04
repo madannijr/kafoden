@@ -35,7 +35,16 @@ final class AdminController extends AbstractController
         $document->setStatut('valide');
 
         // Si le document est validé, on marque aussi l'utilisateur comme vérifié
-        $document->getUtilisateur()->setEstVerifie(true);
+        $utilisateur = $document->getUtilisateur();
+        $utilisateur->setEstVerifie(true);
+
+        // On débloque automatiquement tous les trajets de ce conducteur
+        // qui attendaient sa vérification d'identité
+        foreach ($utilisateur->getTrajetsPublies() as $trajet) {
+            if ($trajet->getStatut() === 'en_attente_verification') {
+                $trajet->setStatut('active');
+            }
+        }
 
         $entityManager->flush();
 
@@ -112,9 +121,7 @@ final class AdminController extends AbstractController
     // Sert un document d'identité de façon sécurisée (admin uniquement)
     #[Route('/admin/document/{id}/voir', name: 'app_admin_document_voir')]
     #[IsGranted('ROLE_ADMIN')]
-    public function voirDocument(
-        DocumentIdentite $document,
-        #[Autowire('%documents_directory%')]
+    public function voirDocument(DocumentIdentite $document, #[Autowire('%documents_directory%')]
         string $documentsDirectory,
     ): BinaryFileResponse {
         $response = new BinaryFileResponse($documentsDirectory . '/' . $document->getCheminFichier());
@@ -128,8 +135,7 @@ final class AdminController extends AbstractController
     // Permet à un utilisateur de consulter SON PROPRE document
     #[Route('/document/{id}/voir', name: 'app_document_voir')]
     #[IsGranted('ROLE_USER')]
-    public function voir(
-        DocumentIdentite $document,
+    public function voir(DocumentIdentite $document,
         #[Autowire('%documents_directory%')]
         string $documentsDirectory,
     ): BinaryFileResponse {

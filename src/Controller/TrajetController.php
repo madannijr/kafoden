@@ -40,13 +40,18 @@ class TrajetController extends AbstractController
             // Le conducteur est toujours l'utilisateur connecté,
             // jamais un champ rempli depuis le formulaire
             $trajet->setConducteur($utilisateur);
-            // Un nouveau trajet est toujours actif à sa création
-            $trajet->setStatut('active');
+
+            // Le statut dépend de si l'identité du conducteur est déjà vérifiée
+            if ($utilisateur->isEstVerifie()) {
+                $trajet->setStatut('active');
+                $this->addFlash('success', 'Votre trajet a été publié avec succès.');
+            } else {
+                $trajet->setStatut('en_attente_verification');
+                $this->addFlash('warning', 'Votre trajet a été enregistré. Il sera visible publiquement une fois votre identité vérifiée.');
+            }
 
             $entityManager->persist($trajet);
             $entityManager->flush();
-
-            $this->addFlash('success', 'Votre trajet a été publié avec succès.');
 
             return $this->redirectToRoute('app_home');
         }
